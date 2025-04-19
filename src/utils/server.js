@@ -10,6 +10,10 @@ import User from './models/Users.js';
 import Credential from './models/Credential.js';
 import Appointment from './models/Appointment.js';
 import Invitation from './models/Invitation.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+
 
 const app = express();
 const server = http.createServer(app);
@@ -20,6 +24,10 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'hachsinail';
 
@@ -131,7 +139,6 @@ wss.on('connection', (ws, req) => {
   }
 });
 
-
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173', 
@@ -149,6 +156,7 @@ app.get('/api/auth/currentUser', (req, res) => {
   return res.json({ id: req.user.id});
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'src/utils/assets/uploads')));
 
 const startServer = async () => {
   try {

@@ -64,3 +64,56 @@ html {
     -webkit-text-fill-color: #ffffff !important;
   }
   
+
+
+  /* For the custom TipTap extension approach */
+.two-column-layout {
+  margin: 1rem 0;
+  position: relative;
+}
+
+.two-column-layout .columns-toolbar {
+  position: absolute;
+  top: -25px;
+  right: 0;
+  display: none;
+}
+
+.two-column-layout:hover .columns-toolbar {
+  display: block;
+}
+
+.two-column-layout .columns-toolbar button {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.two-columns-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.two-columns-container .column-left,
+.two-columns-container .column-right {
+  width: 50%;
+  border: 1px solid #eee;
+  padding: 0.5rem;
+  min-height: 100px;
+}
+
+/* For the CSS-only approach */
+.column-layout {
+  column-count: 2;
+  column-gap: 2rem;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border: 1px dashed #ccc;
+}
+
+.column-layout p {
+  margin-top: 0;
+}

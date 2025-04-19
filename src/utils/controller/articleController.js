@@ -10,7 +10,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Ensure the 'uploads' directory exists
-const uploadDir = path.resolve(__dirname, '..', 'src', 'assets', 'uploads');
+const uploadDir = path.resolve(__dirname, '..', 'assets', 'uploads');
+
 
 // Create 'uploads' directory if it doesn't exist
 if (!fs.existsSync(uploadDir)) {
@@ -82,5 +83,18 @@ export const createArticle = async (req, res) => {
   } catch (error) {
     console.error('💥 Error creating article:', error.message);
     return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+export const getAllArticles = async (req, res) => {
+  try {
+    const articles = await Article.findAll({
+      
+    });
+    return res.json(articles);
+  } catch (error) {
+    console.error('Error fetching appointments:', error);
+    return res.status(500).json({ message: 'Server error retrieving appointments.' });
   }
 };
