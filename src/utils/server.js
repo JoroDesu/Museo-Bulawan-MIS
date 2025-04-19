@@ -157,6 +157,7 @@ app.get('/api/auth/currentUser', (req, res) => {
 });
 
 app.use('/uploads', express.static(path.join(__dirname, 'src/utils/assets/uploads')));
+app.use('/uploads', express.static('uploads'));
 
 const startServer = async () => {
   try {

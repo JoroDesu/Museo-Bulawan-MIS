@@ -90,7 +90,7 @@ export const createArticle = async (req, res) => {
 export const getAllArticles = async (req, res) => {
   try {
     const articles = await Article.findAll({
-      
+      order: [['created_at', 'DESC']],
     });
     return res.json(articles);
   } catch (error) {

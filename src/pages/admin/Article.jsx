@@ -39,9 +39,9 @@ const ArticleForm = () => {
   const Categories = ['Education', 'Exhibit', 'Contents', 'Other'];
   const token = localStorage.getItem('token');
   
-  // Define API URL with proper environment variable or hardcoded value
-  const API_URL = "http://localhost:5000";
-  const UPLOAD_PATH = `${API_URL}/uploads/`;
+  // Define path to your uploads folder - important for displaying images in the modal
+  const BASE_URL = "http://localhost:5000";
+  const UPLOAD_PATH = `${BASE_URL}/src/utils/assets/uploads/`;
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -57,8 +57,7 @@ const ArticleForm = () => {
   const fetchArticles = async () => {
     try {
       setLoading(true);
-      // Make sure this endpoint matches what's defined in your backend
-      const response = await axios.get(`${API_URL}/api/auth/articles`, {
+      const response = await axios.get(`${BASE_URL}/api/auth/articles`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -98,7 +97,7 @@ const ArticleForm = () => {
       if (isEditing) {
         // Update existing article
         response = await axios.put(
-          `${API_URL}/api/auth/article/${editingArticleId}`,
+          `${BASE_URL}/api/auth/article/${editingArticleId}`,
           formData,
           {
             headers: {
@@ -112,7 +111,7 @@ const ArticleForm = () => {
       } else {
         // Create new article
         response = await axios.post(
-          `${API_URL}/api/auth/article`,
+          `${BASE_URL}/api/auth/article`,
           formData,
           {
             headers: {
@@ -175,11 +174,16 @@ const ArticleForm = () => {
       editor.commands.setContent(article.description);
     }
     
-    // Handle thumbnail preview
+    // Handle thumbnail preview for editing
     if (article.images) {
-      // Use the correct path to your uploads folder
-      setPreviewImage(`${UPLOAD_PATH}${article.images}`);
-      setThumbnail(article.images); // Store the filename for reference
+      // If the image exists, we need to construct a URL to it
+      // This URL should point to where the server exposes the uploads directory
+      const imageUrl = `${UPLOAD_PATH}${article.images}`;
+      setPreviewImage(imageUrl);
+      
+      // Store just the filename as a string (not a File object)
+      // This lets us know we need to keep the existing image unless a new one is selected
+      setThumbnail(article.images);
     } else {
       setPreviewImage(null);
       setThumbnail(null);
@@ -483,16 +487,24 @@ const ArticleForm = () => {
                         name="thumbnail"
                         onChange={handleThumbnailChange}
                       />
-                      {/* Display current thumbnail if available */}
-                      {/* {previewImage && (
-                        <div className="mt-2">
+                      
+                      {/* Display current thumbnail name if editing */}
+                      {isEditing && thumbnail && typeof thumbnail === 'string' && (
+                        <div className="mt-1 text-sm text-gray-600">
+                          Current image: {thumbnail}
+                        </div>
+                      )}
+                      
+                      {/* Display thumbnail preview in the form */}
+                      {previewImage && (
+                        <div className="mt-2 border border-gray-200 rounded p-1">
                           <img 
                             src={previewImage}
-                            alt="Article thumbnail" 
-                            className="h-20 object-contain"
+                            alt="Thumbnail preview" 
+                            className="h-24 object-contain mx-auto"
                           />
                         </div>
-                      )} */}
+                      )}
                     </div>
                   </div>
 
