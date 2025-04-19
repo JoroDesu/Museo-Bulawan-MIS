@@ -4,6 +4,7 @@ import AdminNav from '../../components/navbar/AdminNav'
 import CustomDatePicker from '../../components/function/CustomDatePicker'
 import { connectWebSocket, closeWebSocket } from '../../utils/websocket'
 
+
 const Appointment = () => {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [appointments, setAppointments] = useState([])
@@ -16,16 +17,18 @@ const Appointment = () => {
   // Fetch appointments from server
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/auth/appointment', {
+      const res = await axios.post("http://localhost:5000/api/auth/article", formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // added bearer token here
         },
-      })
-      setAppointments(response.data)
+        withCredentials: true,
+      });
+      // Handle success
     } catch (error) {
-      console.error('Error fetching appointments:', error)
-    }
-  }
+      console.error("Error posting article:", error);
+    } 
+    
 
   useEffect(() => {
     fetchAppointments()
@@ -414,5 +417,5 @@ const Appointment = () => {
     </>
   )
 }
-
+}
 export default Appointment

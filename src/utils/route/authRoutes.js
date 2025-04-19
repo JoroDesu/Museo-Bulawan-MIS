@@ -11,6 +11,8 @@ import {
   completeRegistration,
   registrationSuccess
 } from '../controller/invitationController.js';
+import { createArticle, upload } from '../controller/articleController.js';
+
 
 const router = express.Router();
 
@@ -37,4 +39,5 @@ router.get('/complete-registration/:token', renderCompleteRegistration);
 router.post('/complete-registration/:token', completeRegistration);
 router.get('/registration-success', registrationSuccess);
 
+router.post('/article', upload.single('thumbnail'), createArticle);
 export default router;

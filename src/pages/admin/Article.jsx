@@ -2,72 +2,77 @@ import React, { useState } from 'react'
 import AdminNav from '../../components/navbar/AdminNav'
 import axios from "axios";
 import CustomDatePicker from '../../components/function/CustomDatePicker'
+import { useEditor, EditorContent } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import Button from "@/components/ui/button"
 
+import {
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+} from "lucide-react";
 
-export default function ArticleForm() {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [author, setAuthor] = useState("");
-  const [address, setAddress] = useState("");
-  // const [coverImage, setCoverImage] = useState(null);
+const ArticleForm = () => {
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [category, setCategory] = useState("")
+  const [address, setAddress] = useState("")
   const [selectedDate, setSelectedDate] = useState("")
-
-;
+  const [thumbnail, setThumbnail] = useState(null)
   const [showModal, setShowModal] = useState(false);
+
+
+  const Categories = ['Education', 'Exhibit', 'Contents', 'Other'];
+
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: "", // Initial content
+  })
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
     formData.append("title", title);
     formData.append("article_category", category);
-    formData.append("description", description);
-    formData.append("user_id", 1); // hardcoded user ID for now
+    formData.append("description", editor?.getHTML() || "");
+    formData.append("user_id", 1);
     formData.append("author", author);
     formData.append("address", address);
     formData.append("selectedDate", selectedDate);
-    
-    // if (coverImage) formData.append("cover_image", coverImage);
-
-    console.log("Form Data:", {
-      title,
-      category,
-      description,
-      user_id: 1,
-      author,
-      address,
-      selectedDate,
-      // coverImage,
-      
-    });
-
+  
+    if (thumbnail) {
+      formData.append("thumbnail", thumbnail);
+    }
+  
+    // Log FormData to check values before submission
+    console.log("📦 FormData being submitted:");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+  
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/article", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-
-      alert("Article submitted!");
-      setTitle("");
-      setCategory("");
-      setDescription("");
-      setAuthor("");
-      setAddress("");
-      setSelectedDate("");
-      // setCoverImage(null);
-      setShowModal(false);
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/article", // Change the endpoint as needed
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      
+      console.log("Article created successfully!", response.data);
     } catch (error) {
-      if (error.response?.data?.message) {
-        alert("Error: " + error.response.data.message);
-      } else {
-        alert("Error submitting article.");
-      }
-      console.error(error);
+      console.error("Error creating article:", error.response?.data || error.message);
     }
   };
+  
   
   
   
@@ -227,91 +232,285 @@ export default function ArticleForm() {
           </div>
         </div>
         {showModal && (
-        <div className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white w-[40rem] p-6 rounded-lg shadow-xl relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 text-2xl text-gray-600 hover:text-black"
-            >
-              &times;
-            </button>
-            <h2 className="text-3xl font-bold mb-6">Add New Article</h2>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
-        <input
-          type="text"
-          placeholder="Title"
-          className="border-2 border-gray-300 px-4 py-2 rounded text-xl"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Author"
-            className="border-2 border-gray-300 px-4 py-2 rounded text-xl"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-          <input
-            type="date"
-            className="border-2 border-gray-300 px-4 py-2 rounded text-xl"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Address"
-            className="border-2 border-gray-300 px-4 py-2 rounded text-xl"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-          <select
-            className="border-2 border-gray-300 px-4 py-2 rounded text-xl"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required
-          >
-            <option value="" disabled>Select Category</option>
-            <option value="education">Education</option>
-            <option value="exhibition">Exhibition</option>
-            <option value="contest">Contest</option>
-            <option value="others">Others</option>
-          </select>
-        </div>
-
-        {/* <input
-          type="file"
-          accept="image/*"
-          className="border-2 border-gray-300 px-4 py-2 rounded text-xl"
-          onChange={(e) => setCoverImage(e.target.files[0])}
-        /> */}
-
-        <textarea
-          placeholder="Description"
-          rows={4}
-          className="border-2 border-gray-300 px-4 py-2 rounded text-xl"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
+  <div className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center">
+    <div className="flex w-[85rem] gap-4">
+      {/* Left Side - Article Editor Form */}
+      <div className="bg-white w-[40rem] p-6 rounded-lg shadow-xl relative">
         <button
-          type="submit"
-          className="mt-4 bg-[#6BFFD5] px-6 py-2 text-xl font-semibold text-black rounded hover:bg-[#5deac2]"
+          onClick={() => setShowModal(false)}
+          className="absolute top-3 right-3 text-2xl text-gray-600 hover:text-black"
         >
-          Submit Article
+          &times;
         </button>
-      </form>
+            
+        <h2 className="text-3xl font-bold mb-6">Add New Article</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label>Title</label>
+              <input
+                className="w-full border px-2 py-1 rounded"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div>
+              <label>Author</label>
+              <input
+                className="w-full border px-2 py-1 rounded"
+                type="text"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
+            </div>
+            <div>
+              <label>Category</label>
+              <select
+                className="w-full border px-2 py-1 rounded"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="" disabled={category !== ""}>
+                  Select a category
+                </option>
+                {Categories.map((cat, index) => (
+                  <option key={index} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label>Address</label>
+              <input
+                className="w-full border px-2 py-1 rounded"
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+            <div>
+              <label>Date</label>
+              <input
+                className="w-full border px-2 py-1 rounded"
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+            </div>
+            <div>
+              <label>Thumbnail</label>
+              <input
+                className="w-full border px-2 py-1 rounded"
+                type="file"
+                name="thumbnail"
+                onChange={(e) => setThumbnail(e.target.files[0])}
+              />
+            </div>
+          </div>
 
+          {/* Tiptap Rich Text Editor */}
+          <div className="space-y-2">
+            <label className="font-bold">Body</label>
+            <div className="flex items-center gap-2 p-2 bg-[#d6c2ad] rounded border border-blue-400">
+              {/* Heading buttons */}
+              <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        editor?.chain().focus().toggleHeading({ level }).run();
+                      }}
+                      className="text-sm px-1 hover:underline"
+                    >
+                      H{level}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Font size input */}
+                <input
+                  type="number"
+                  min="10"
+                  max="72"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().setFontSize(`${e.target.value}px`).run();
+                  }}
+                  defaultValue={20}
+                  className="w-12 text-center text-sm px-1 py-0.5 rounded border border-gray-300 bg-white"
+                  style={{
+                    appearance: "textfield",
+                    MozAppearance: "textfield",
+                    WebkitAppearance: "none",
+                  }}
+                />
+
+              {/* Divider */}
+              <div className="border-l h-6 mx-2" />
+              {/* Formatting buttons */}
+              <div className="flex gap-1 ml-2">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().toggleBold().run();
+                  }}
+                  className={`p-1 border rounded ${editor?.isActive("bold") ? "bg-white" : ""}`}
+                >
+                  <Bold size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().toggleUnderline().run();
+                  }}
+                  className={`p-1 border rounded ${editor?.isActive("underline") ? "bg-white" : ""}`}
+                >
+                  <Underline size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().toggleItalic().run();
+                  }}
+                  className={`p-1 border rounded ${editor?.isActive("italic") ? "bg-white" : ""}`}
+                >
+                  <Italic size={16} />
+                </button>
+              </div>
+              {/* Divider */}
+              <div className="border-l h-6 mx-2" />
+              {/* Text alignment buttons */}
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().setTextAlign("left").run();
+                  }}
+                  className={`p-1 border rounded ${editor?.isActive({ textAlign: "left" }) ? "bg-white" : ""}`}
+                >
+                  <AlignLeft size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().setTextAlign("center").run();
+                  }}
+                  className={`p-1 border rounded ${editor?.isActive({ textAlign: "center" }) ? "bg-white" : ""}`}
+                >
+                  <AlignCenter size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().setTextAlign("right").run();
+                  }}
+                  className={`p-1 border rounded ${editor?.isActive({ textAlign: "right" }) ? "bg-white" : ""}`}
+                >
+                  <AlignRight size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor?.chain().focus().setTextAlign("justify").run();
+                  }}
+                  className={`p-1 border rounded ${editor?.isActive({ textAlign: "justify" }) ? "bg-white" : ""}`}
+                >
+                  <AlignJustify size={16} />
+                </button>
+              </div>
+
+            </div>
+
+            {/* Editor body */}
+            <div className="border rounded p-4 min-h-[150px]" onClick={(e) => e.stopPropagation()}>
+              <EditorContent editor={editor} />
+            </div>
+          </div>
+
+          <Button type="submit" className="mt-4">Submit Article</Button>
+        </form>
+      </div>
+      
+      {/* Right Side - Article Preview */}
+      <div className="bg-white w-[40rem] p-6 rounded-lg shadow-xl overflow-y-auto max-h-[90vh]">
+        <h3 className="text-2xl font-bold mb-4">Article Preview</h3>
+        
+        {/* Title Section */}
+        <div className='border border-gray-200 p-4 mb-4 rounded'>
+          <h1 className='text-center text-3xl font-bold'>{title || "Title of the News or Event"}</h1>
+        </div>
+        
+        {/* Info Section */}
+        <div className="flex w-full justify-center mb-6">
+          <div className="flex w-full items-center justify-center text-center text-base">
+            <span className="w-1/4 h-24 border border-gray-300 flex flex-col items-center justify-center p-2">
+              <h4 className='text-lg font-medium'>Date</h4>
+              <p className="text-sm">{selectedDate ? new Date(selectedDate).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'}) : "month dd, yyyy"}</p>
+            </span>
+            <span className="w-1/4 h-24 border border-gray-300 flex flex-col items-center justify-center p-2">
+              <h4 className='text-lg font-medium'>Author</h4>
+              <p className="text-sm">{author || "Name of the Author"}</p>
+            </span>
+            <span className="w-1/4 h-24 border border-gray-300 flex flex-col items-center justify-center p-2">
+              <h4 className='text-lg font-medium'>Address</h4>
+              <p className="text-sm">{address || "Location of the event or news"}</p>
+            </span>
+            <span className="w-1/4 h-24 border border-gray-300 flex flex-col items-center justify-center p-2">
+              <h4 className='text-lg font-medium'>Category</h4>
+              <p className="text-sm">{category || "[placeholder]"}</p>
+            </span>
           </div>
         </div>
-      )}
+        
+        {/* Article Content Preview */}
+        <div className="border border-gray-200 p-4 rounded min-h-[300px]">
+          {thumbnail && (
+            <div className="flex justify-center mb-4">
+              <img 
+                src={URL.createObjectURL(thumbnail)} 
+                alt="Article thumbnail" 
+                className="max-h-64 object-contain"
+              />
+            </div>
+          )}
+          
+          <div className="prose max-w-none">
+            {editor?.getHTML() ? (
+              <div dangerouslySetInnerHTML={{ __html: editor.getHTML() }} />
+            ) : (
+              <p className="text-gray-400 italic">Article content will appear here...</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
       </div>
     </>
   )
 }
 
+export default ArticleForm
