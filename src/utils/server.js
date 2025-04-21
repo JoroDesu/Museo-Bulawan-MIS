@@ -156,8 +156,13 @@ app.get('/api/auth/currentUser', (req, res) => {
   return res.json({ id: req.user.id});
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'src/utils/assets/uploads')));
-app.use('/uploads', express.static('uploads'));
+
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  next();
+}, express.static(path.join(__dirname, 'src/utils/assets/uploads')));
+
+
 
 const startServer = async () => {
   try {
