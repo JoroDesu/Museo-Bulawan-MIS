@@ -20,11 +20,11 @@ const PrivateRoute = () => {
           clearTimeout(logoutTimer);
           logoutTimer = null;
         }
-        
+        const API_URL = import.meta.env.VITE_API_URL;
         // Use axios for consistency and better error handling
-        await axios.post('http://localhost:5000/api/auth/logout', {
+        await axios.post(`${API_URL}/api/auth/logout`, {
           isExpired: isExpired // Let the server know if this was due to token expiration
-        }, {
+        },  {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -69,8 +69,10 @@ const PrivateRoute = () => {
       
       if (!token) {
         try {
-          const res = await axios.get('http://localhost:5000/api/auth/refresh-token', {
-            withCredentials: true
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await fetch(`${API_URL}/api/auth/refresh-token`, {
+            method: 'GET',
+            credentials: 'include',  // Ensures cookies are sent with the request (like withCredentials: true in axios)
           });
 
           token = res.data.token;

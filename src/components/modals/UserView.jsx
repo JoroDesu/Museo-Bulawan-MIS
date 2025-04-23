@@ -16,22 +16,28 @@ const UserView = ({ userId, onClose }) => {
     Z: '#33CCCC',
   }
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const fetchLogs = () => {
     axios
-      .get(`http://localhost:5000/api/auth/login-logs/${userId}`, {
+      .get(`${API_URL}/api/auth/login-logs/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        setLoginLogs(res.data.logs || [])
+        const logs = res.data.logs
+        setLoginLogs(logs && logs.length > 0 ? logs : [])
       })
       .catch((err) => {
         console.error('Error fetching login logs:', err.response?.data || err.message)
       })
   }
+  
+  
+
 
   const fetchUsers = () => {
     axios
-      .get(`http://localhost:5000/api/auth/fetchUser/${userId}`, {
+      .get(`${API_URL}/api/auth/fetchUser/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

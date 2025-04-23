@@ -27,11 +27,12 @@ const Login = () => {
       }
     }
 
+    const API_URL = import.meta.env.VITE_API_URL;
     // If no valid token in localStorage, check fallback cookie
     const checkCookieToken = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/auth/verify-cookie', {
-          withCredentials: true,
+        const res = await axios.get(`${API_URL}/api/auth/verify-cookie`, {
+          withCredentials: true // Include credentials if necessary
         });
 
         if (res.status === 200 && res.data.token) {
@@ -52,8 +53,8 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/login',
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${API_URL}/api/auth/login`,
         { email, password },
         { withCredentials: true } // Needed for cookie
       );

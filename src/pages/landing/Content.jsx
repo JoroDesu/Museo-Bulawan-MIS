@@ -3,59 +3,63 @@ import LandingNav from '../../components/navbar/LandingNav';
 import { ScrollRestoration } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+import backgroundImage from '../../../src/assets/Fernando-Amorsolo-Women-Bathing-and-Washing Clothes-7463.png'
+import eventImage from '../../../src/assets/img_1.png';
+
+
 const itemsData = {
   "items": [
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Education",
       "name": "Event Name 1",
       "date": "Month dd, yyyy"
      
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Subtopic",
       "name": "Event Name 2",
       "date": "Month dd, yyyy"
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Content",
       "name": "Event Name 3",
       "date": "Month dd, yyyy"
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Workshop",
       "name": "Event Name 4",
       "date": "Month dd, yyyy"
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Seminar",
       "name": "Event Name 5",
       "date": "Month dd, yyyy"
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Conference",
       "name": "Event Name 6",
       "date": "Month dd, yyyy"
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Dance",
       "name": "Event Name 7",
       "date": "Month dd, yyyy"
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Exhibit",
       "name": "Event Name 8",
       "date": "Month dd, yyyy"
     },
     {
-      "image": "src/assets/image1.png",
+      "image": eventImage,
       "category": "Performance",
       "name": "Event Name 9",
       "date": "Month dd, yyyy"
@@ -78,10 +82,7 @@ const Content = () => {
         {/* Background Image Section */}
         <div
           className="w-screen h-[40rem] bg-cover bg-center bg-no-repeat relative"
-          style={{
-            backgroundImage:
-              "url('./src/assets/Fernando-Amorsolo-Women-Bathing-and-Washing Clothes-7463.png')",
-          }}
+          style={{ backgroundImage: `url(${backgroundImage})` }}
         >
           {/* Centered Search Bar Overlay */}
           <div className="absolute inset-0 flex justify-center items-center">

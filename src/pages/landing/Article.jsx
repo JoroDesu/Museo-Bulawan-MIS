@@ -2,6 +2,10 @@ import React from 'react'
 import LandingNav from '../../components/navbar/LandingNav'
 import { ScrollRestoration } from 'react-router-dom'
 
+import topImage from '../../../src/assets/456411725_818119137184125_1334004125955189067_n.png';
+import articleImage1 from '../../../src/assets/455363415_812761527719886_1195461782753847821_n (1).png';
+import articleImage2 from '../../../src/assets/456426171_818223347173704_7806646081153137378_n 2.png';
+
 const Article = () => {
 
 const ArticleSection = ({ title, content, image, dropCap }) => {
@@ -61,7 +65,7 @@ const ArticleSection = ({ title, content, image, dropCap }) => {
   <div className='max-w-[140rem] 3xl:max-w-[180rem] mx-auto text-[3rem]'>
     {/* Top image */}
     <div className='flex justify-center p-[2rem]'>
-      <img src='../src/assets/456411725_818119137184125_1334004125955189067_n.png' alt='' />
+      <img src={topImage} alt='' />
     </div>
 
     {/* Article Sections */}
@@ -74,12 +78,12 @@ const ArticleSection = ({ title, content, image, dropCap }) => {
         content=''
       />
       <ArticleSection
-        image='../src/assets/455363415_812761527719886_1195461782753847821_n (1).png'
+        image={articleImage1}
         content='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut '
       />
       <ArticleSection
         content='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'
-        image='../src/assets/456426171_818223347173704_7806646081153137378_n 2.png'
+        image={articleImage2}
       />
       <ArticleSection
         content='orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
@@ -101,7 +105,7 @@ const ArticleSection = ({ title, content, image, dropCap }) => {
       />
       <ArticleSection
         content='Lorem ipsum dolor sit amet, consectetur...'
-        image='../src/assets/456426171_818223347173704_7806646081153137378_n 2.png'
+        image={articleImage2}
       />
       <ArticleSection
         content='Lorem ipsum dolor sit amet, consectetur...'

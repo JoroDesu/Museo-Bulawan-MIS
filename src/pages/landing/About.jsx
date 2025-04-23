@@ -3,63 +3,82 @@ import LandingNav from '../../components/navbar/LandingNav'
 import { ScrollRestoration } from 'react-router-dom'
 import { useState, useEffect  } from 'react';
 
+import curatorAbel from '../../../src/assets/IMG_2751_pp_JPG 1 (1).png';
+import curatorKatherine from '../../../src/assets/IMG_2751_pp_JPG 2.png';
+import curatorAndrew from '../../../src/assets/IMG_E2784_pp_JPG 1.png';
+import curatorGlenda from '../../../src/assets/image 41.png';
+import curatorJeah from '../../../src/assets/image 42.png';
+import curatorVanessa from '../../../src/assets/image 43.png';
+import curatorMhiles from '../../../src/assets/image 44.png';
+import curatorAndrea from '../../../src/assets/image 45.png';
+import curatorToto from '../../../src/assets/image 46.png';
+import curatorLeni from '../../../src/assets/image 47.png';
+import curatorAndex from '../../../src/assets/image 48.png';
+import museumBackground from '../../../src/assets/440832115_947772303495782_6010038099693171993_n.png';
+import museumImage1 from '../../../src/assets/Bulawan-Museum-14 1.png';
+import museumImage2 from '../../../src/assets/455363415_812761527719886_1195461782753847821_n.png';
+import museumExhibit from '../../../src/assets/456513150_820321936963845_2439220914474688907_n 1.png';
+import visionBackground from '../../../src/assets/8900f8_0ff4146c815c45f78852a9574ae753d8~mv2 1.png';
+import curatorMessage from '../../../src/assets/467396235_122120510066524881_2018490976163991958_n 2.png';
+import keyPeopleHeader from '../../../src/assets/8900f8_517f4f9ec7054b88a23b301bf31d6596~mv2 1.png';
+
+
 const curatorProfiles = [
   {
     name: "Abel C. Icatlo",
     role: "Museum Curator",
-    image: "../src/assets/IMG_2751_pp_JPG 1 (1).png",
+    image: curatorAbel,
   },
   {
     name: "Katherine Dabocol",
     role: "Administrative Assistant II",
-    image: "../src/assets/IMG_2751_pp_JPG 2.png", // Add your own image
+    image: curatorKatherine,
   },
   {
-    name: "Andrew Necio",
-    role: "Administrative Aide II",
-    image: "../src/assets/IMG_E2784_pp_JPG 1.png", // Add your own image
+    name: "Andrew C. Icatlo",
+    role: "Museum Curator",
+    image: curatorAndrew,
   },
   {
-    name: "Glenda Amaranto",
-    role: "Museum Staff",
-    image: "../src/assets/image 41.png", // Add your own image
+    name: "Glenda C. Icatlo",
+    role: "Museum Curator",
+    image: curatorGlenda,
   },
   {
-    name: "Jeah Sayno",
-    role: "Museum Staff",
-    image: "../src/assets/image 42.png", // Add your own image
+    name: "Jeah C. Icatlo",
+    role: "Museum Curator",
+    image: curatorJeah,
   },
   {
-    name: "Vanessa Gunda",
-    role: "Museum Staff",
-    image: "../src/assets/image 43.png", // Add your own image
+    name: "Vanessa C. Icatlo",
+    role: "Museum Curator",
+    image: curatorVanessa,
   },
   {
-    name: "Mhiles Bracero",
-    role: "Museum Staff",
-    image: "../src/assets/image 44.png", // Add your own image
+    name: "Mhiles C. Icatlo",
+    role: "Museum Curator",
+    image: curatorMhiles,
   },
   {
-    name: "Andrea Calma",
-    role: "Museum Staff",
-    image: "../src/assets/image 45.png", // Add your own image
+    name: "Andrea C. Icatlo",
+    role: "Museum Curator",
+    image: curatorAndrea,
   },
   {
-    name: "Toto Ong",
-    role: "Museum Staff",
-    image: "../src/assets/image 46.png", // Add your own image
+    name: "Toto C. Icatlo",
+    role: "Museum Curator",
+    image: curatorToto,
   },
   {
-    name: "Leni Rodriguez",
-    role: "Museum Staff",
-    image: "../src/assets/image 47.png", // Add your own image
+    name: "Leni C. Icatlo",
+    role: "Museum Curator",
+    image: curatorLeni,
   },
   {
-    name: "Andex Bermundo",
-    role: "Museum Staff",
-    image: "../src/assets/image 48.png", // Add your own image
+    name: "Andex C. Icatlo",
+    role: "Museum Curator",
+    image: curatorAndex,
   },
-
 ];
 
 const CuratorCarousel = () => {
@@ -137,7 +156,9 @@ const About = () => {
       <div className='min-h-[10%] w-screen'>
         <LandingNav/>
       </div>
-      <div className='w-screen h-[40rem] bg-cover bg-center bg-no-repeat' style={{ backgroundImage: "url('./src/assets/440832115_947772303495782_6010038099693171993_n.png')" }}>
+      <div className='w-screen h-[40rem] bg-cover bg-center bg-no-repeat' style={{ backgroundImage: `url(${museumBackground})` }}
+      >
+
 
       </div>
     </div>
@@ -149,7 +170,7 @@ const About = () => {
             <span className='w-full sm:w-2/5  h-full '>
             <div className="m-[2rem] sm: max-w-full h-auto  items-end text-justify">
              <p>The Museo Bulawan, also known as the Community Museum of Camarines Norte, embodies the rich cultural and historical essence of the province. Its origins trace back to 1995, when the construction of a new neo-classical provincial capitol building provided a fitting backdrop for the establishment of a museum. The Greco-Roman architecture of the building inspired a vision of timeless grandeur, making it an ideal setting to house artifacts and exhibits that celebrate the province's heritage.
-                <img src="../src/assets/Bulawan-Museum-14 1.png" alt="About Us" className="mt-6 w-full h-auto rounded-lg shadow-lg" />
+                <img src={museumImage1} alt="About Us" className="mt-6 w-full h-auto rounded-lg shadow-lg" />
               </p>
               </div>
               
@@ -180,7 +201,7 @@ const About = () => {
           <span className='w-full sm:w-1/2  h-full '>
           <div className='m-[2rem] sm:m-auto'>
               <h1 className='text-[4rem] font-bold mb-[6rem]'>“Heritage is not what we inherit from the past; it is what we preserve for the future.”</h1>
-              <img src="../src/assets/455363415_812761527719886_1195461782753847821_n.png" alt="About Us" className="mt-6 w-full h-auto rounded-lg shadow-lg" />
+              <img src={museumImage2} alt="About Us" className="mt-6 w-full h-auto rounded-lg shadow-lg" />
 
            </div> 
            </span>
@@ -224,7 +245,7 @@ const About = () => {
            </span>
            <span className='w-full sm:w-3/5 h-full flex justify-center items-center'>
            <div className='m-[2rem] sm:m-auto'>
-           <img src="../src\assets\456513150_820321936963845_2439220914474688907_n 1.png" alt="About Us" className="mt-6 w-[100rem] h-auto rounded-lg shadow-lg" />
+           <img src={museumExhibit} alt="About Us" className="mt-6 w-[100rem] h-auto rounded-lg shadow-lg" />
             </div>
             </span>
 
@@ -257,10 +278,7 @@ const About = () => {
         {/* 4th part */}
         <div>
         <div className="w-screen sm:w-full h-auto sm:h-[63rem] bg-cover bg-center bg-no-repeat flex items-center justify-center text-white text-center px-8 my-[2rem] sm:my-auto"
-            style={{
-              backgroundImage:
-                "url('./src/assets/8900f8_0ff4146c815c45f78852a9574ae753d8~mv2 1.png')",
-            }}>
+            style={{ backgroundImage: `url(${visionBackground})` }}>
             <div className='w-[140rem] my-[2rem]'>
               <h1 className="text-[5rem] font-bold mb-[3rem]">Vision</h1>
               <p className="text-[2.4rem] text-center leading-[4rem]">
@@ -292,7 +310,7 @@ const About = () => {
                 <div className='w-[140rem] mt-[10rem]'>
                   <h1 className="text-[4rem] mb-[3rem] text-[#FCE6BC]">A Message From The Museum Curator's</h1>
                     <h1 className="text-[5rem] font-bold mb-[3rem] text-[#FCE6BC]">Mr. Abel C. Icatlo</h1>
-                      <img src="../src/assets/467396235_122120510066524881_2018490976163991958_n 2.png" alt="Abel C. Icatlo" className='w-[30rem] h-auto mx-auto'/>
+                      <img src={curatorMessage} alt="Abel C. Icatlo" className='w-[30rem] h-auto mx-auto'/>
                       <p className="w-auto  h-full text-[2.4rem] text-center leading-[4rem] text-white mx-auto sm:mx-[25rem] mt-[5rem] mb-[10rem]">
                             Through the pages of history we saw the searing revolutionary fire of the nationalist heroes of Camarines Norte who convulsed in a determined uprising in Daet in April 1898 and later established the First Rizal Monument in December of that year. The seeds of freedom sown by the local heroes of this Province engendered an awakened nation and a people who were wont to pay the price of freedom. Through the wars and dictatorship, the people of Camarines Norte seasoned the challenges with perseverance and fortitude.
                             Museo Bulawan, which is a community museum, attempts to capture the rich panorama of struggle of the Local people. History aside, Museo Bulawan, showcases as well the exquisite treasure of this province which is gold. Actually, bulawan is a Filipino word for gold and it is said that Camarines Norte is a province that sits in a mound of gold.
@@ -306,7 +324,7 @@ const About = () => {
 
             {/* 7th part */}
             <div>
-              <img src="../src/assets/8900f8_517f4f9ec7054b88a23b301bf31d6596~mv2 1.png" alt="" />
+              <img src={keyPeopleHeader} alt="" />
                 <div className='w-auto text-center my-[5rem] '>
                   <h1 className='text-[5rem] mb-[2rem] font-bold'>
                     Key People

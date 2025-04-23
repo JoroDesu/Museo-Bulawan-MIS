@@ -8,6 +8,7 @@ import Artifact from "../../pages/admin/Artifact"
 import Dashboard from "../../pages/admin/Dashboard"
 import Log from "../../pages/admin/Log"
 import User from "../../pages/admin/User"
+import Schedule from '../../pages/admin/Schedule';
 
 const AdminRoutes = [
 
@@ -19,7 +20,9 @@ const AdminRoutes = [
     { path: 'article', element: <Article /> },
     { path: 'artifact', element: <Artifact /> },
     { path: 'log', element: <Log /> },
-    { path: 'user', element: <User /> }
+    { path: 'user', element: <User /> },
+    { path: 'schedule', element: <Schedule /> }
+
 
 ]
 

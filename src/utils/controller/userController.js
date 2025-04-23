@@ -40,6 +40,17 @@ export const displaySpecificUser = async (req, res) => {
     }
   };
 
+  export const fetchCredential = async (req, res) => {
+  
+    try {
+      const user = await Credential.findAll({});
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching user.' });
+    }
+  };
+
   export const getUserLoginLogs = async (req, res) => {
     const { userId } = req.params;
   

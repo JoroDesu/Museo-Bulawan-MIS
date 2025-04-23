@@ -1,7 +1,8 @@
 // models/Appointment.js
+
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../database.js'; // Adjust if necessary
-import Visitor from './Visitors.js';         // Make sure the file name is correct
+import { sequelize } from '../database.js'; 
+import Visitor from './Visitors.js';           // Make sure the path/file name matches your real file
 
 const Appointment = sequelize.define('Appointment', {
   appointment_id: {
@@ -26,20 +27,24 @@ const Appointment = sequelize.define('Appointment', {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
-      min: 1 // must be at least 1
+      min: 1
     }
   },
   preferred_date: {
-    type: DataTypes.DATEONLY, // Only store date part
+    type: DataTypes.DATEONLY,
     allowNull: false
   },
   preferred_time: {
     type: DataTypes.STRING(30),
     allowNull: false
   },
+  /**
+   * Store creation_date with date & time
+   */
   creation_date: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
   },
   additional_notes: {
     type: DataTypes.TEXT,
@@ -50,7 +55,7 @@ const Appointment = sequelize.define('Appointment', {
   timestamps: false
 });
 
-// Relationship
+// Relationship: One visitor has many appointments
 Visitor.hasMany(Appointment, { foreignKey: 'visitor_id' });
 Appointment.belongsTo(Visitor, { foreignKey: 'visitor_id' });
 

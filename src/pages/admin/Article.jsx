@@ -85,138 +85,51 @@ const ArticleForm = () => {
     formData.append("author", author);
     formData.append("address", address);
     formData.append("selectedDate", selectedDate);
-  
-    // Only append thumbnail if it's a File object (not a string from existing image)
-    if (thumbnail && thumbnail instanceof File) {
-      formData.append("thumbnail", thumbnail);
-    }
-  
+    
+    // if (coverImage) formData.append("cover_image", coverImage);
+
+    console.log("Form Data:", {
+      title,
+      category,
+      description,
+      user_id: 1,
+      author,
+      address,
+      selectedDate,
+      // coverImage,
+      
+    });
+
+    const API_URL = import.meta.env.VITE_API_URL;
+
     try {
-      let response;
-      
-      if (isEditing) {
-        // Update existing article
-        response = await axios.put(
-          `${BASE_URL}/api/auth/article/${editingArticleId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true,
-          }
-        );
-        console.log("Article updated successfully!", response.data);
-      } else {
-        // Create new article
-        response = await axios.post(
-          `${BASE_URL}/api/auth/article`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true,
-          }
-        );
-        console.log("Article created successfully!", response.data);
-      }
-      
-      // Reset form and state
-      resetForm();
-      
-      // Refresh articles list
-      fetchArticles();
-    } catch (error) {
-      console.error(`Error ${isEditing ? 'updating' : 'creating'} article:`, error.response?.data || error.message);
-    }
-  };
-
-  // Reset form fields and editing state
-  const resetForm = () => {
-    setTitle("");
-    setAuthor("");
-    setCategory("");
-    setAddress("");
-    setSelectedDate("");
-    setThumbnail(null);
-    setPreviewImage(null);
-    editor?.commands.setContent("");
-    setShowModal(false);
-    setIsEditing(false);
-    setEditingArticleId(null);
-  };
-
-  // Handle row click to edit article
-  const handleRowClick = (article) => {
-    setIsEditing(true);
-    setEditingArticleId(article.article_id);
+      const res = await axios.post(`${API_URL}/api/auth/article`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
     
-    // Set form values from article data
-    setTitle(article.title || "");
-    setAuthor(article.author || "");
-    setCategory(article.article_category || "");
-    setAddress(article.address || "");
-    
-    // Format date for the input field (YYYY-MM-DD)
-    if (article.upload_date) {
-      const date = new Date(article.upload_date);
-      const formattedDate = date.toISOString().split('T')[0];
-      setSelectedDate(formattedDate);
-    } else {
+      alert("Article submitted!");
+      setTitle("");
+      setCategory("");
+      setDescription("");
+      setAuthor("");
+      setAddress("");
       setSelectedDate("");
+      // setCoverImage(null);
+      setShowModal(false);
+    } catch (error) {
+      if (error.response?.data?.message) {
+        alert("Error: " + error.response.data.message);
+      } else {
+        alert("Error submitting article.");
+      }
+      console.error(error);
     }
-    
-    // Set content in the editor
-    if (editor && article.description) {
-      editor.commands.setContent(article.description);
-    }
-    
-    // Handle thumbnail preview for editing
-    if (article.images) {
-      // If the image exists, we need to construct a URL to it
-      // This URL should point to where the server exposes the uploads directory
-      const imageUrl = `${UPLOAD_PATH}${article.images}`;
-      setPreviewImage(imageUrl);
-      
-      // Store just the filename as a string (not a File object)
-      // This lets us know we need to keep the existing image unless a new one is selected
-      setThumbnail(article.images);
-    } else {
-      setPreviewImage(null);
-      setThumbnail(null);
-    }
-    
-    // Show the modal with populated data
-    setShowModal(true);
-  };
-
-  // Handle file input change
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setThumbnail(file);
-      setPreviewImage(URL.createObjectURL(file));
-    }
-  };
-
-  // Filter articles based on search term
-  const filteredArticles = articles.filter(article => {
-    // Filter by search term
-    const searchMatch = !searchTerm || 
-      article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.article_category?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return searchMatch;
-  });
-
-  // Calculate counts
-  const postedCount = articles.filter(article => article.status === 'posted').length;
-  const pendingCount = articles.filter(article => article.status === 'pending').length;
-  const totalCount = articles.length;
+  };    
+  
+  
   
   return (
     <>

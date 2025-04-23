@@ -298,6 +298,54 @@ const ResponsiveDatePicker = (props) => {
           margin: ${isMobile ? '0.1rem' : '0.15rem'};
           font-size: ${isMobile ? '0.85rem' : '1rem'};
         }
+          /* Custom Clear Button */
+.react-datepicker__close-icon {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  height: 100%;
+  outline: 0;
+  padding: 0 15px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  vertical-align: middle;
+}
+
+.react-datepicker__close-icon::after {
+  content: "";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  background: none;
+  color: #E57373;
+  font-size: 20px;
+  height: auto;
+  width: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+}
+
+.react-datepicker__close-icon::before {
+  content: "\f00d";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #E57373;
+  font-size: 24px;
+}
+
+/* Add hover effect */
+.react-datepicker__close-icon:hover::before {
+  color: #D32F2F;
+}
+
+/* Fix the positioning when inside a custom input */
+.react-datepicker-wrapper {
+  position: relative;
+}
+
         
         /* Responsive touch targets */
         @media (max-width: 480px) {

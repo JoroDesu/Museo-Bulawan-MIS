@@ -24,4 +24,41 @@ max-w-[140rem] 3xl:max-w-[180rem] min-h-[79rem] h-screen
               <i className="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
             </div>
 
+
+            export const revokeInvitation = async (req, res, next) => {
+              try {
+                const { id } = req.params;
+                const invitation = await Invitation.findByPk(id);
             
+                if (!invitation) return res.status(404).json({ message: 'Not found' });
+            
+                const previousState = invitation.toJSON();
+            
+                await invitation.update({ deletedAt: new Date() });
+            
+                const newState = invitation.toJSON();
+            
+                req.logDetails = {
+                  previous: previousState,
+                  new: newState,
+                  message: `Invitation with ID ${invitationId} was revoked and marked for soft deletion in the Invitation table`
+                };
+            
+                res.locals.newRecordId = invitation.id;
+            
+                next(); 
+                res.json({ message: 'Invitation revoked' });
+            
+              } catch (error) {
+                console.error('Error:', error);
+                res.status(500).json({ message: 'Server error' });
+              }
+            };
+            
+
+            // Invitation endpoints
+router.post('/invitations', autoLogout, sendInvitation, logAction('create', 'Invitation'));
+
+router.get('/invitations', autoLogout, getPendingInvitations);
+router.post('/invitations/:id/resend', autoLogout, resendInvitation, logAction('update', 'Invitation'));
+router.delete('/invitations/:id', autoLogout, revokeInvitation, logAction('soft_delete', 'Invitation') );

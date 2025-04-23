@@ -20,7 +20,21 @@ export const connectWebSocket = (onDataChange, onRefresh) => {
     socketRef.close();
   }
 
-  const socket = new WebSocket(`ws://${window.location.hostname}:5000/?token=${token}`);
+  const isSecure = window.location.protocol === 'https:';
+  const protocol = isSecure ? 'wss' : 'ws';
+  const hostname = window.location.hostname;
+  const port = isSecure ? '' : ':5000';
+  
+  const wsUrl = `${protocol}://${hostname}${port}/?token=${token}`;
+  
+  console.log("Connecting to WebSocket:", wsUrl);
+  const socket = new WebSocket(wsUrl);
+  
+  // const socket = new WebSocket(
+  //   `${protocol}://${hostname}${port ? `:${port}` : ''}/?token=${token}`
+  // );
+
+
 
   socket.onopen = () => {
     console.log('WebSocket connected successfully');

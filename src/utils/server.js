@@ -6,7 +6,13 @@ import authRoutes from './route/authRoutes.js';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 import jwt from 'jsonwebtoken';
-import User from './models/Users.js'; 
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+
+// Import all models
+import User from './models/Users.js'; // Ensure you import the models
 import Credential from './models/Credential.js';
 import Appointment from './models/Appointment.js';
 import Invitation from './models/Invitation.js';
@@ -14,15 +20,22 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 
+import Log from './models/Log.js';
+
+dotenv.config(); 
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
+
+
+app.set('trust proxy', process.env.NODE_ENV === 'production');
+
 const corsOptions = {
-  origin: 'http://localhost:5173',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: process.env.CORS_ORIGIN, 
+  credentials: process.env.CORS_CREDENTIALS === 'true', 
+  methods: process.env.CORS_METHODS ? process.env.CORS_METHODS.split(',') : ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: process.env.CORS_ALLOWED_HEADERS ? process.env.CORS_ALLOWED_HEADERS.split(',') : ['Content-Type', 'Authorization'],
 };
 
 
@@ -34,7 +47,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'hachsinail';
 const userConnections = new Map();
 
 const setupModelHooks = () => {
-  const models = [User, Credential, Appointment, Invitation];
+  const models = [User, Credential, Appointment, Invitation, Log];
   
   models.forEach(model => {
     model.addHook('afterCreate', (instance, options) => {
@@ -88,7 +101,8 @@ const broadcastDataChange = (changeData) => {
 };
 
 wss.on('connection', (ws, req) => {
-  const token = new URL(req.url, `ws://${req.headers.host}`).searchParams.get('token');
+  const token = new URL(req.url, `wss://${req.headers.host}`).searchParams.get('token');
+  
   
   if (!token) {
     ws.close(1008, 'Unauthorized: No token provided');
@@ -140,20 +154,16 @@ wss.on('connection', (ws, req) => {
 });
 
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:5173', 
-  credentials: true,
-}));
 app.use(cors(corsOptions));
 app.use(cookieParser());
+
 
 app.use('/api/auth', authRoutes);
 app.get('/api/auth/currentUser', (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Not authenticated' });
   }
-  // `req.user` might be set by your auth middleware
-  return res.json({ id: req.user.id});
+  return res.json({ id: req.user.id });
 });
 
 
@@ -164,17 +174,32 @@ app.use('/uploads', (req, res, next) => {
 
 
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.join(__dirname, '../../dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../dist/index.html'));
+});
+
+
+
+console.log("Serving static files from:", path.join(__dirname, '../dist'));
+
+
 const startServer = async () => {
   try {
-    await sequelize.authenticate();  
+    await sequelize.authenticate();
     await sequelize.sync();
-    setupModelHooks(); // Initialize database change tracking
-    console.log('Database connected and models synchronized');
-    
-    server.listen(5000, () => console.log('Server and WebSocket running on port 5000'));
+    setupModelHooks();
+
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode`);
+      console.log(`HTTP server listening on port ${PORT}`);
+    });
+
   } catch (error) {
-    // console.error('Unable to connect to the database:', error);
-    console.error('Unable to connect to the database');
+    console.error('Database connection error:', error);
+    process.exit(1);
   }
 };
 

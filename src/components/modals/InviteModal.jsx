@@ -90,9 +90,10 @@ const InviteModal = ({ onClose, onInvite }) => {
     setLoading(true);
     
     try {
+      const API_URL = import.meta.env.VITE_API_URL;
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/auth/invitations',
+        `${API_URL}/api/auth/invitations`,
         formData,
         {
           headers: {
